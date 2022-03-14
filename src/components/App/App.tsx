@@ -1,5 +1,7 @@
+import { observer } from 'mobx-react';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import authStore from '../../stores/authStore';
 import LoginPage from '../pages/LoginPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import PersonalAreaPage from '../pages/PersonalAreaPage';
@@ -10,11 +12,11 @@ const App: React.FC = () => {
     <div className="App">
       <Routes>
         <Route path='/' element={<LoginPage/>}/>
-        {false && <Route path='/personal-area' element={<PersonalAreaPage/>}/>}
+        {authStore.isAuth && <Route path='/personal-area' element={<PersonalAreaPage/>}/>}
         <Route path='*' element={<NotFoundPage/>}/>
       </Routes>
     </div>
   );
 }
 
-export default App;
+export default observer(App);
