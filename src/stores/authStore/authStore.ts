@@ -1,9 +1,10 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { User } from "./authStore.models";
 import service from "./authStore.services";
+import storageUtil from "../../utils/storageUtil";
 
 const initialStoreValues = {
-  isAuth: false,
+  isAuth: !!storageUtil.getAccessToken(),
   login: "",
   errorMessage: "",
 };
@@ -21,7 +22,16 @@ class AuthStore {
       errorMessage: observable,
       isAuth: observable,
       auth: action.bound,
+      updateIsAuth: action.bound,
+      logout: action.bound,
     });
+  }
+
+
+  logout(): void {
+    storageUtil.clearToken();
+    this.isAuth = false;
+    this.login = initialStoreValues.login;
   }
 
   async auth(login: string, password: string): Promise<void> {
@@ -30,12 +40,36 @@ class AuthStore {
       runInAction(() => {
         if (user) {
           this.login = user.login;
+          storageUtil.setToken(user.id);
           this.isAuth = true;
         } else {
-            this.errorMessage = "Такого пользователя не существует"
-            setTimeout(() => {this.errorMessage = initialStoreValues.errorMessage}, 2000);
+          this.errorMessage = "Такого пользователя не существует";
+          setTimeout(() => {
+            this.errorMessage = initialStoreValues.errorMessage;
+          }, 2000);
         }
       });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateIsAuth(): Promise<void> {
+    try {
+      this.isAuth = !!storageUtil.getAccessToken();
+      const token = storageUtil.getAccessToken();
+      if (token) {
+        const user: User = await service.getUser(token);
+        runInAction(() => {
+          if (user) {
+            this.login = user.login;
+          } else {
+            this.errorMessage = "Такого пользователя не существует";
+            setTimeout(() => {
+              this.errorMessage = initialStoreValues.errorMessage;
+            }, 2000);
+          }
+        });
+      }
     } catch (error) {
       console.log(error);
     }

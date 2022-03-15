@@ -24,6 +24,7 @@ const LoginPage: React.FC = () => {
     };
 
     const login = async (): Promise<void> => {
+        // debugger;
         await authStore.auth(form.login, form.password);
         authStore.isAuth && navigate('personal-area');
     }

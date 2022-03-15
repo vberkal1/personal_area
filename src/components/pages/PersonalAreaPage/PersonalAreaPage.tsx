@@ -1,11 +1,18 @@
+import { observer } from 'mobx-react';
 import React from 'react';
+import authStore from '../../../stores/authStore';
+import Navbar from '../../layout/Navbar';
+
 
 const PersonalAreaPage: React.FC = () => {
+
+    const { login, logout } = authStore;
+
     return (
         <div>
-            <h1>PersonalAreaPage</h1>
+            <Navbar login={login} logout={logout} />
         </div>
     );
 };
 
-export default PersonalAreaPage;
+export default observer(PersonalAreaPage);
