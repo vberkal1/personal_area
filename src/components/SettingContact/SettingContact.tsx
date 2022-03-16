@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { AddContactParametrs } from '../../stores/contactsStore';
-
+import classes from './SettingContact.module.scss';
 
 type SettingContactProps = {
     saveSettings: (requestParametrs: AddContactParametrs) => void;
@@ -21,8 +21,12 @@ const SettingContact: React.FC<SettingContactProps> = ({ saveSettings, contactIn
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const saveResult = (): void => {
+        saveSettings(form);
+    }
+
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card className={classes.component} sx={{ maxWidth: 345 }}>
             <CardContent>
                 <TextField
                     name="name"
@@ -48,7 +52,7 @@ const SettingContact: React.FC<SettingContactProps> = ({ saveSettings, contactIn
             </CardContent>
             <CardActions>
                 <Button
-                    onClick={() => saveSettings(form)}
+                    onClick={saveResult}
                     size="small"
                 >
                     сохранить

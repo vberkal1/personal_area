@@ -20,6 +20,7 @@ const LoginPage: React.FC = () => {
     const [form, setForm] = useState<Form>({ login: '', password: '' });
 
     const changeFormValues = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+        authStore.resetStoreValues();
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
@@ -30,7 +31,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <Container maxWidth="sm">
-            <h1>LoginPage</h1>
+            <h1>Авторизация</h1>
             <FormControl sx={{ m: 1 }} error variant="standard">
                 <TextField
                     value={form.login}
@@ -45,6 +46,7 @@ const LoginPage: React.FC = () => {
                     value={form.password}
                     onChange={changeFormValues}
                     fullWidth
+                    type="password"
                     name="password"
                     label="Пароль"
                     variant="outlined"

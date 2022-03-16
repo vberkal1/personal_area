@@ -31,6 +31,10 @@ const Contact: React.FC<ContactProps> = ({ contactInfo }) => {
             .then(() => setIsEditMode(false));
     }
 
+    const toggleEditMode = (): void => {
+        setIsEditMode(!isEditMode)
+    }
+
     return (
         <>
             {
@@ -52,7 +56,7 @@ const Contact: React.FC<ContactProps> = ({ contactInfo }) => {
                         </CardContent>
                         <CardActions>
                             <Button
-                                onClick={() => setIsEditMode(!isEditMode)}
+                                onClick={toggleEditMode}
                                 size="small"
                             >
                                 изменить

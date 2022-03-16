@@ -12,6 +12,7 @@ import {
     Toolbar,
     Tooltip
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 type Nullable<T> = T | undefined | null;
 
@@ -30,6 +31,7 @@ type NavbarProps = {
 }
 
 const Navbar: React.FC<NavbarProps> = ({login, logout}) => {
+    const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<Nullable<Element>>(null);
 
     const handleOpenUserMenu: MouseEventHandler = (event: MouseEvent): void => {
@@ -39,6 +41,11 @@ const Navbar: React.FC<NavbarProps> = ({login, logout}) => {
     const handleCloseUserMenu = (): void => {
         setAnchorElUser(null);
     };
+
+    const  goToLoginPage = (): void => {
+        navigate('/');
+        logout();
+    }
     return (
         <ThemeProvider theme={darkTheme}>
             <AppBar position="static">
@@ -61,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({login, logout}) => {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                <MenuItem onClick={logout} key={'SimpleDialog'}>
+                                <MenuItem onClick={goToLoginPage} key={'SimpleDialog'}>
                                     Выйти
                                 </MenuItem>
                             </Menu>

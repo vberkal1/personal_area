@@ -24,7 +24,13 @@ class AuthStore {
       auth: action.bound,
       updateIsAuth: action.bound,
       logout: action.bound,
+      resetStoreValues: action.bound,
     });
+  }
+
+
+  resetStoreValues(): void{
+    this.errorMessage = initialStoreValues.errorMessage;
   }
 
 
@@ -44,9 +50,6 @@ class AuthStore {
           this.isAuth = true;
         } else {
           this.errorMessage = "Такого пользователя не существует";
-          setTimeout(() => {
-            this.errorMessage = initialStoreValues.errorMessage;
-          }, 2000);
         }
       });
     } catch (error) {
@@ -65,9 +68,6 @@ class AuthStore {
             this.login = user.login;
           } else {
             this.errorMessage = "Такого пользователя не существует";
-            setTimeout(() => {
-              this.errorMessage = initialStoreValues.errorMessage;
-            }, 2000);
           }
         });
       }

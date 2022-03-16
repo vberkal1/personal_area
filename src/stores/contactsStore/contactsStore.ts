@@ -6,19 +6,31 @@ import { v4 as uuidv4 } from "uuid";
 
 const initialStoreValues = {
   contacts: [],
+  searchValue: "",
 };
 
 class ContactsStore {
   contacts: Array<Contact> = initialStoreValues.contacts;
 
+  searchValue: string = initialStoreValues.searchValue;
+
   constructor() {
     makeObservable(this, {
       contacts: observable,
+      searchValue: observable,
       getContacts: action.bound,
       deleteContact: action.bound,
       addContact: action.bound,
       editContact: action.bound,
+      changeSearchValue: action.bound,
     });
+  }
+
+  changeSearchValue(
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void {
+    this.searchValue = e.target.value;
+    this.getContacts();
   }
 
   async deleteContact(contactId: string): Promise<void> {
@@ -41,10 +53,15 @@ class ContactsStore {
     }
   }
 
-  async editContact(requestParametrs: AddContactParametrs, contactId: string): Promise<void> {
+  async editContact(
+    requestParametrs: AddContactParametrs,
+    contactId: string
+  ): Promise<void> {
     const { name, number, url } = requestParametrs;
     const requestContacts: Array<Contact> = [...this.contacts];
-    const index = requestContacts.findIndex((contact) => contact.contactId === contactId);
+    const index = requestContacts.findIndex(
+      (contact) => contact.contactId === contactId
+    );
     requestContacts[index] = { contactId: uuidv4(), name, number, url };
 
     try {
@@ -88,8 +105,11 @@ class ContactsStore {
       const token = storageUtil.getAccessToken();
       if (token) {
         const contacts: Array<Contact> = await service.getContacts(token);
+        const filterContacts = contacts.filter((contact) =>
+          contact.name.toLowerCase().includes(this.searchValue)
+        );
         runInAction(() => {
-          this.contacts = contacts;
+          this.contacts = filterContacts;
         });
       }
     } catch (error) {

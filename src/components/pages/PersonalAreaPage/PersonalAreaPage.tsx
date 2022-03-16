@@ -10,25 +10,30 @@ import { AddContactParametrs } from '../../../stores/contactsStore';
 import SettingContact from '../../SettingContact';
 import Contact from '../../Contact';
 import classes from './PersonalAreaPage.module.scss';
+import { TextField } from '@mui/material';
 
 
 
 const PersonalAreaPage: React.FC = () => {
 
     const { login, logout } = authStore;
-    const { getContacts, contacts } = contactsStore;
+    const { getContacts, contacts, changeSearchValue, searchValue } = contactsStore;
 
     useEffect(() => {
         getContacts();
     }, []);
 
+    const [isAddPannelVisible, setIsAddPannelVisible] = useState<boolean>(false);
+    const initialEditFormValues = { name: '', number: '', url: '' };
+
     const addContact = (requestParametrs: AddContactParametrs): void => {
-        contactsStore.addContact(requestParametrs);
+        contactsStore.addContact(requestParametrs).then(() => setIsAddPannelVisible(false));
+    };
+
+    const toggleAddPannelVisible = (): void => {
+        setIsAddPannelVisible(!isAddPannelVisible)
     }
 
-    const [isAddPannelVisible, setIsAddPannelVisible] = useState<boolean>(false);
-
-    const initialEditFormValues = { name: '', number: '', url: '' };
 
     return (
         <div>
@@ -36,7 +41,7 @@ const PersonalAreaPage: React.FC = () => {
             <Container maxWidth="sm">
                 <div className={classes.content}>
                     <Button
-                        onClick={() => setIsAddPannelVisible(!isAddPannelVisible)}
+                        onClick={toggleAddPannelVisible}
                         className={classes.addButton}
                         variant="outlined"
                     >
@@ -46,6 +51,7 @@ const PersonalAreaPage: React.FC = () => {
                         isAddPannelVisible &&
                         <SettingContact contactInfo={initialEditFormValues} saveSettings={addContact} />
                     }
+                    <TextField value={searchValue} onChange={changeSearchValue} label="Поиск" variant="standard" />
                     <div className={classes.contacts}>
                         {contacts.map(contact => <Contact key={uuidv4()} contactInfo={contact} />)}
                     </div>
