@@ -9,7 +9,7 @@ class Service {
         (response: AxiosResponse<PersonalContacts>) => response.data.contactList
       );
   }
-  deleteContact(
+  editContacts(
     id: string,
     requestContacts: Array<Contact>
   ): Promise<Array<Contact>> {

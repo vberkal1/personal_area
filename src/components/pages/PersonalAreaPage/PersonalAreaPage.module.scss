@@ -1,6 +1,14 @@
-.contacts{
+.content{
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    align-items: center;
     margin-top: 30px;
+    gap: 30px;
+}
+
+.contacts{
+    display: flex;
+    width: 350px;
+    flex-direction: column;
+    gap: 30px;
 }

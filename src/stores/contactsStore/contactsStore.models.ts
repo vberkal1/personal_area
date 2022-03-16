@@ -9,3 +9,5 @@ export type Contact = {
   number: string;
   url: string;
 };
+
+export type AddContactParametrs = Omit<Contact, "contactId">;

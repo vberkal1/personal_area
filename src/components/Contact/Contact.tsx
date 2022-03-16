@@ -5,11 +5,12 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
-import classes from './Contact.module.scss';
 import { Contact as ContactType } from '../../stores/contactsStore/contactsStore.models';
 import { observer } from 'mobx-react-lite';
 import contactsStore from '../../stores/contactsStore/contactsStore';
+import SettingContact from '../SettingContact';
+import { AddContactParametrs } from '../../stores/contactsStore';
+import classes from './Contact.module.scss';
 
 type ContactProps = {
     contactInfo: ContactType
@@ -19,35 +20,27 @@ const Contact: React.FC<ContactProps> = ({ contactInfo }) => {
 
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-    const { deleteContact } = contactsStore;
+    const { deleteContact, editContact } = contactsStore;
 
     const deleteCard = (): void => {
         deleteContact(contactInfo.contactId);
     }
 
+    const saveSettings = (requestParametrs: AddContactParametrs): void => {
+        editContact(requestParametrs, contactInfo.contactId)
+            .then(() => setIsEditMode(false));
+    }
+
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <>
             {
                 isEditMode ? (
-                    <>
-                        <CardContent>
-                            <TextField label="Имя" variant="standard" />
-                            <TextField label="Номер телефона" variant="standard" />
-                            <TextField label="URL картинки" variant="standard" />
-                        </CardContent>
-                        <CardActions>
-                            <Button
-                                onClick={() => setIsEditMode(!isEditMode)}
-                                size="small"
-                            >
-                                сохранить
-                            </Button>
-                            <Button size="small">удалить</Button>
-                        </CardActions>
-
-                    </>
+                    <SettingContact
+                        contactInfo={contactInfo}
+                        saveSettings={saveSettings}
+                    />
                 ) : (
-                    <>
+                    <Card sx={{ maxWidth: 345 }}>
                         <CardContent className={classes.content}>
                             <div className={classes.container}>
                                 <Avatar className={classes.avatar} alt="Remy Sharp" src={contactInfo.url} />
@@ -66,10 +59,10 @@ const Contact: React.FC<ContactProps> = ({ contactInfo }) => {
                             </Button>
                             <Button onClick={deleteCard} size="small">удалить</Button>
                         </CardActions>
-                    </>
+                    </Card>
                 )
             }
-        </Card>
+        </>
     )
 }
 
