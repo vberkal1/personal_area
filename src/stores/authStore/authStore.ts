@@ -53,6 +53,7 @@ class AuthStore {
       console.log(error);
     }
   }
+  
   async updateIsAuth(): Promise<void> {
     try {
       this.isAuth = !!storageUtil.getAccessToken();

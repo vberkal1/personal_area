@@ -10,5 +10,29 @@
       "login": "user2",
       "password": "user2"
     }
+  ],
+  "contacts": [
+    {
+      "id": "1",
+      "contactList": [
+        {
+          "contactId": "3444444",
+          "name": "LORA",
+          "number": "89923232911",
+          "url": "https://www.meme-arsenal.com/memes/f5488c8fe984e23096faa8e4336570c9.jpg"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "contactList": [
+        {
+          "contactId": "3545",
+          "name": "LORA",
+          "number": "89923232911",
+          "url": "https://www.meme-arsenal.com/memes/f5488c8fe984e23096faa8e4336570c9.jpg"
+        }
+      ]
+    }
   ]
 }
