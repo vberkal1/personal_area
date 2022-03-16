@@ -5,6 +5,7 @@ import authStore from '../../stores/authStore';
 import LoginPage from '../pages/LoginPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import PersonalAreaPage from '../pages/PersonalAreaPage';
+import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import './App.scss';
 
 const App: React.FC = () => {
@@ -17,7 +18,11 @@ const App: React.FC = () => {
     <div className="App">
       <Routes>
         <Route path='/' element={<LoginPage />} />
-        {authStore.isAuth && <Route path='/personal-area' element={<PersonalAreaPage />} />}
+        <Route path='/personal-area' element={
+          <PrivateRoute isAuth={authStore.isAuth} >
+            <PersonalAreaPage />
+          </PrivateRoute>
+        } />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </div>
