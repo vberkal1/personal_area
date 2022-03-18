@@ -1,12 +1,16 @@
-.content {
-    text-align: left;
-    .container {
-        display: flex;
-        gap: 30px;
-
-        .avatar {
-            height: 50px;
-            width: 50px;
+.component{
+    flex-shrink: 0;
+    .content {
+        background-color: #ccc;
+        text-align: left;
+        .container {
+            display: flex;
+            gap: 30px;
+    
+            .avatar {
+                height: 50px;
+                width: 50px;
+            }
         }
     }
 }

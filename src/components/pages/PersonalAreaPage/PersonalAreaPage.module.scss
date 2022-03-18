@@ -1,5 +1,4 @@
-.content{
-    border: 3px solid #ccc;
+.content {
     height: 530px;
     padding: 30px;
     display: flex;
@@ -7,12 +6,15 @@
     align-items: center;
     margin-top: 30px;
     gap: 30px;
-    overflow: auto;
+    overflow: hidden;
 }
 
-.contacts{
+.contacts {
+    padding: 40px;
     display: flex;
-    width: 350px;
     flex-direction: column;
     gap: 30px;
+    width: 350px;
+    height: 500px;
+    overflow: auto;
 }

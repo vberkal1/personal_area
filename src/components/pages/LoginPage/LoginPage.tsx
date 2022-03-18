@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Button,
@@ -9,54 +9,81 @@ import {
 } from '@mui/material';
 import authStore from '../../../stores/authStore';
 import { observer } from 'mobx-react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
-type Form = {
-    login: string;
-    password: string;
-};
+
+const validationSchema = Yup.object().shape({
+    login: Yup.string().required('Поле не заполнено'),
+    password: Yup.string().required('Поле не заполнено'),
+});
+
 
 const LoginPage: React.FC = () => {
+
+    const {
+        values,
+        handleChange,
+        submitForm,
+        errors,
+        touched,
+    } = useFormik({
+        initialValues: {
+            login: '',
+            password: '',
+        },
+        async onSubmit(formData) {
+            await authStore.auth(formData.login, formData.password);
+            authStore.isAuth && navigate('personal-area');
+        },
+        validationSchema,
+    });
+
     const navigate = useNavigate();
-    const [form, setForm] = useState<Form>({ login: '', password: '' });
 
     const changeFormValues = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         authStore.resetStoreValues();
-        setForm({ ...form, [e.target.name]: e.target.value });
+        handleChange(e);
     };
 
-    const login = async (): Promise<void> => {
-        await authStore.auth(form.login, form.password);
+    useEffect(() => {
         authStore.isAuth && navigate('personal-area');
-    }
+    }, []);
 
     return (
         <Container maxWidth="sm">
             <h1>Авторизация</h1>
             <FormControl sx={{ m: 1 }} error variant="standard">
                 <TextField
-                    value={form.login}
+                    required
+                    value={values.login}
                     onChange={changeFormValues}
                     fullWidth
                     label="Логин"
+                    id="login"
                     name="login"
                     variant="outlined"
                 />
+                <FormHelperText>{touched.login ? errors.login : undefined}</FormHelperText>
                 <br />
                 <TextField
-                    value={form.password}
+                    required
+                    value={values.password}
                     onChange={changeFormValues}
                     fullWidth
+                    id="password"
                     type="password"
                     name="password"
                     label="Пароль"
                     variant="outlined"
                 />
+                <FormHelperText>{touched.password ? errors.password : undefined}</FormHelperText>
                 <br />
                 <FormHelperText>{authStore.errorMessage}</FormHelperText>
                 <Button
                     fullWidth
                     variant="contained"
-                    onClick={login}
+                    onClick={submitForm}
                 >
                     Войти
                 </Button>

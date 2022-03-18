@@ -49,7 +49,7 @@ class AuthStore {
           storageUtil.setToken(user.id);
           this.isAuth = true;
         } else {
-          this.errorMessage = "Такого пользователя не существует";
+          this.errorMessage = "некорректные данные";
         }
       });
     } catch (error) {
@@ -66,8 +66,6 @@ class AuthStore {
         runInAction(() => {
           if (user) {
             this.login = user.login;
-          } else {
-            this.errorMessage = "Такого пользователя не существует";
           }
         });
       }

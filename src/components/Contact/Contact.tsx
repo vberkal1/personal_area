@@ -44,7 +44,7 @@ const Contact: React.FC<ContactProps> = ({ contactInfo }) => {
                         saveSettings={saveSettings}
                     />
                 ) : (
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card className={classes.component} sx={{ maxWidth: 345 }}>
                         <CardContent className={classes.content}>
                             <div className={classes.container}>
                                 <Avatar className={classes.avatar} alt="Remy Sharp" src={contactInfo.url} />

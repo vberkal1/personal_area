@@ -32,7 +32,7 @@ const PersonalAreaPage: React.FC = () => {
 
     const toggleAddPannelVisible = (): void => {
         setIsAddPannelVisible(!isAddPannelVisible)
-    }
+    };
 
 
     return (

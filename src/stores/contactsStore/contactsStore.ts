@@ -44,8 +44,9 @@ class ContactsStore {
           token,
           requestContacts
         );
+        const filterContacts = this.filterContacts(contacts);
         runInAction(() => {
-          this.contacts = contacts;
+          this.contacts = filterContacts;
         });
       }
     } catch (error) {
@@ -71,8 +72,9 @@ class ContactsStore {
           token,
           requestContacts
         );
+        const filterContacts = this.filterContacts(contacts);
         runInAction(() => {
-          this.contacts = contacts;
+          this.contacts = filterContacts;
         });
       }
     } catch (error) {
@@ -82,8 +84,10 @@ class ContactsStore {
 
   async addContact(requestParametrs: AddContactParametrs): Promise<void> {
     const { name, number, url } = requestParametrs;
-    const requestContacts: Array<Contact> = [...this.contacts];
-    requestContacts.push({ contactId: uuidv4(), name, number, url });
+    const requestContacts: Array<Contact> = [
+      { contactId: uuidv4(), name, number, url },
+      ...this.contacts,
+    ];
     try {
       const token = storageUtil.getAccessToken();
       if (token) {
@@ -91,8 +95,9 @@ class ContactsStore {
           token,
           requestContacts
         );
+        const filterContacts = this.filterContacts(contacts);
         runInAction(() => {
-          this.contacts = contacts;
+          this.contacts = filterContacts;
         });
       }
     } catch (error) {
@@ -105,9 +110,7 @@ class ContactsStore {
       const token = storageUtil.getAccessToken();
       if (token) {
         const contacts: Array<Contact> = await service.getContacts(token);
-        const filterContacts = contacts.filter((contact) =>
-          contact.name.toLowerCase().includes(this.searchValue)
-        );
+        const filterContacts = this.filterContacts(contacts);
         runInAction(() => {
           this.contacts = filterContacts;
         });
@@ -115,6 +118,12 @@ class ContactsStore {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  filterContacts(contacts: Array<Contact>): Array<Contact> {
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(this.searchValue.toLowerCase())
+    );
   }
 }
 
